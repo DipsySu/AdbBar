@@ -49,7 +49,8 @@
 <style>
   .app-container {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 10px);
+    margin-top: 10px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -59,7 +60,7 @@
     color: #e0e0e0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 13px;
-    overflow: hidden;
+    overflow: visible;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.05);
@@ -69,12 +70,12 @@
     position: absolute;
     top: 0;
     left: 50%;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     background: rgba(30, 30, 30, 0.96);
     border-left: 1px solid rgba(255, 255, 255, 0.08);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    transform: translate(-50%, -1px) rotate(45deg);
+    transform: translate(-50%, -50%) rotate(45deg);
     pointer-events: none;
     z-index: 1;
   }
@@ -83,7 +84,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 12px 6px;
+    padding: 10px 12px 6px;
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
