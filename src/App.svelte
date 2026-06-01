@@ -49,8 +49,7 @@
 <style>
   .app-container {
     width: 100%;
-    height: calc(100vh - 10px);
-    margin-top: 10px;
+    height: 100vh;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -60,25 +59,24 @@
     color: #e0e0e0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 13px;
-    overflow: visible;
+    overflow: hidden;
+    padding-top: 10px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+    clip-path: polygon(
+      0 10px,
+      calc(50% - 13px) 10px,
+      50% 0,
+      calc(50% + 13px) 10px,
+      100% 10px,
+      100% 100%,
+      0 100%
+    );
   }
 
   .popover-arrow {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-bottom: 12px solid #2f2f2f;
-    filter: drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.08));
-    transform: translateX(-50%);
-    pointer-events: none;
-    z-index: 1;
+    display: none;
   }
 
   .titlebar {
