@@ -53,30 +53,39 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background: #2f2f2f;
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: transparent;
     color: #e0e0e0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 13px;
-    overflow: hidden;
-    padding-top: 10px;
+    overflow: visible;
+    padding-top: 8px;
+  }
+
+  .app-container::before {
+    content: '';
+    position: absolute;
+    inset: 8px 0 0;
+    background: #2f2f2f;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.05);
-    clip-path: polygon(
-      0 10px,
-      calc(50% - 13px) 10px,
-      50% 0,
-      calc(50% + 13px) 10px,
-      100% 10px,
-      100% 100%,
-      0 100%
-    );
+    pointer-events: none;
   }
 
   .popover-arrow {
-    display: none;
+    position: absolute;
+    top: 1px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #2f2f2f;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 2;
   }
 
   .titlebar {
@@ -124,5 +133,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 1;
   }
 </style>
