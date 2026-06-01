@@ -54,7 +54,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background: rgba(30, 30, 30, 0.92);
+    background: #2f2f2f;
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     color: #e0e0e0;
@@ -68,14 +68,15 @@
 
   .popover-arrow {
     position: absolute;
-    top: 0;
+    top: -10px;
     left: 50%;
-    width: 20px;
-    height: 20px;
-    background: rgba(30, 30, 30, 0.96);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    transform: translate(-50%, -50%) rotate(45deg);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid #2f2f2f;
+    filter: drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.08));
+    transform: translateX(-50%);
     pointer-events: none;
     z-index: 1;
   }
