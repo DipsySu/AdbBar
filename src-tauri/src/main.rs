@@ -1,6 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{
+    image::Image,
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder},
     Manager,
@@ -13,9 +14,11 @@ fn main() {
 fn tray_setup(app: &tauri::App) {
     let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>).unwrap();
     let menu = Menu::with_items(app, &[&quit]).unwrap();
+    let tray_icon = tray_icon_image();
 
     let _tray = TrayIconBuilder::new()
-        .icon(app.default_window_icon().unwrap().clone())
+        .icon(tray_icon)
+        .icon_as_template(true)
         .tooltip("ADB Bar")
         .menu(&menu)
         .show_menu_on_left_click(false)
@@ -68,4 +71,38 @@ fn tray_setup(app: &tauri::App) {
         })
         .build(app)
         .expect("Failed to create tray icon");
+}
+
+fn tray_icon_image() -> Image<'static> {
+    const SIZE: u32 = 18;
+    let mut rgba = vec![0u8; (SIZE * SIZE * 4) as usize];
+
+    for y in 0..SIZE {
+        for x in 0..SIZE {
+            let left_stem = (4..=6).contains(&x) && (3..=14).contains(&y);
+            let right_stem = (11..=13).contains(&x) && (3..=14).contains(&y);
+            let top_bar = (7..=10).contains(&x) && (3..=5).contains(&y);
+            let middle_bar = (7..=10).contains(&x) && (8..=10).contains(&y);
+            let bottom_bar = (7..=10).contains(&x) && (12..=14).contains(&y);
+            let left_foot = (3..=4).contains(&x) && (12..=14).contains(&y);
+            let right_foot = (14..=15).contains(&x) && (12..=14).contains(&y);
+            let filled = left_stem
+                || right_stem
+                || top_bar
+                || middle_bar
+                || bottom_bar
+                || left_foot
+                || right_foot;
+
+            if filled {
+                let idx = ((y * SIZE + x) * 4) as usize;
+                rgba[idx] = 0;
+                rgba[idx + 1] = 0;
+                rgba[idx + 2] = 0;
+                rgba[idx + 3] = 255;
+            }
+        }
+    }
+
+    Image::new_owned(rgba, SIZE, SIZE)
 }

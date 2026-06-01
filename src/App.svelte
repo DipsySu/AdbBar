@@ -23,6 +23,7 @@
 </script>
 
 <div class="app-container">
+  <div class="popover-arrow"></div>
   <div class="titlebar">
     <span class="titlebar-text">ADB Bar</span>
     <button class="close-btn" onclick={handleClose} title="Quit">
@@ -49,6 +50,7 @@
   .app-container {
     width: 100%;
     height: 100vh;
+    position: relative;
     display: flex;
     flex-direction: column;
     background: rgba(30, 30, 30, 0.92);
@@ -63,14 +65,30 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.05);
   }
 
+  .popover-arrow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    background: rgba(30, 30, 30, 0.96);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    transform: translate(-50%, -1px) rotate(45deg);
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .titlebar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px 6px;
+    padding: 15px 12px 6px;
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
+    position: relative;
+    z-index: 2;
   }
 
   .titlebar-text {
