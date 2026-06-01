@@ -18,7 +18,7 @@ fn tray_setup(app: &tauri::App) {
 
     let _tray = TrayIconBuilder::new()
         .icon(tray_icon)
-        .icon_as_template(false)
+        .icon_as_template(true)
         .tooltip("ADB Bar")
         .menu(&menu)
         .show_menu_on_left_click(false)
