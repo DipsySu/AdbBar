@@ -49,7 +49,19 @@ async fn disconnect_device(
 }
 
 #[tauri::command]
-async fn refresh_all(state: tauri::State<'_, AppState>) -> Result<Vec<AdbDevice>, String> {
+async fn refresh_all(
+    state: tauri::State<'_, AppState>,
+    reconnect: Option<bool>,
+) -> Result<Vec<AdbDevice>, String> {
+    if reconnect.unwrap_or(false) {
+        // Re-attempt connection for all stored devices to detect dropped connections.
+        let guard = state.store.store.lock().await;
+        let addresses: Vec<String> = guard.devices.iter().map(|d| d.address()).collect();
+        drop(guard);
+        for addr in &addresses {
+            let _ = state.adb.connect(addr).await;
+        }
+    }
     adb::AdbService::refresh_statuses(state.adb.clone(), state.store.clone()).await
 }
 
@@ -175,6 +187,26 @@ async fn install_scrcpy(
 }
 
 #[tauri::command]
+async fn restart_adb(state: tauri::State<'_, AppState>) -> Result<String, String> {
+    state.adb.run(&["kill-server"], 5).await?;
+    state.adb.run(&["start-server"], 10).await?;
+    Ok("ADB server restarted".to_string())
+}
+
+#[tauri::command]
+async fn enable_tcpip(
+    state: tauri::State<'_, AppState>,
+    address: Option<String>,
+    port: Option<u16>,
+) -> Result<String, String> {
+    let port_str = port.unwrap_or(5555).to_string();
+    match address {
+        Some(addr) => state.adb.run(&["-s", &addr, "tcpip", &port_str], 10).await,
+        None => state.adb.run(&["tcpip", &port_str], 10).await,
+    }
+}
+
+#[tauri::command]
 async fn quit_app(app: tauri::AppHandle) -> Result<(), String> {
     app.exit(0);
     Ok(())
@@ -232,6 +264,8 @@ where
             set_adb_path,
             detect_scrcpy_status,
             install_scrcpy,
+            restart_adb,
+            enable_tcpip,
             quit_app,
         ])
         .build(tauri::generate_context!())

@@ -6,6 +6,8 @@
     setAdbPath,
     detectScrcpyStatus,
     installScrcpy,
+    restartAdb,
+    enableTcpip,
   } from './api';
   import { listen } from './api';
   import { getErrorMessage } from './errors';
@@ -16,6 +18,9 @@
   let appVersion = $state('');
   let adbValid = $state<boolean | null>(null);
   let unlisten: (() => void) | null = $state(null);
+  let adbBusy = $state(false);
+  let tcpipPort = $state(5555);
+  let tcpipBusy = $state(false);
 
   const scrcpyStatus = $derived(store.scrcpyStatus);
   const scrcpyInstallLog = $derived(store.scrcpyInstallLog);
@@ -105,6 +110,30 @@
     }
   }
 
+  async function handleRestartAdb() {
+    adbBusy = true;
+    try {
+      const msg = await restartAdb();
+      store.showStatus(msg || 'ADB server restarted');
+    } catch (e) {
+      store.showStatus(getErrorMessage(e, 'Failed to restart ADB'));
+    } finally {
+      adbBusy = false;
+    }
+  }
+
+  async function handleEnableTcpip() {
+    tcpipBusy = true;
+    try {
+      const msg = await enableTcpip(undefined, tcpipPort);
+      store.showStatus(msg || `TCP/IP mode enabled on port ${tcpipPort}`);
+    } catch (e) {
+      store.showStatus(getErrorMessage(e, 'Failed to enable TCP/IP'));
+    } finally {
+      tcpipBusy = false;
+    }
+  }
+
   async function handleInstallScrcpy() {
     store.scrcpyInstallLog = '';
     store.isInstallingScrcpy = true;
@@ -177,6 +206,51 @@
           Auto Detect
         </button>
       </div>
+    </section>
+
+    <!-- ADB Tools Section -->
+    <section class="section">
+      <h2 class="section-title">ADB Tools</h2>
+      <button
+        class="glass-btn full"
+        onclick={handleRestartAdb}
+        disabled={adbBusy}
+      >
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 2v6h-6" />
+          <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+          <path d="M3 22v-6h6" />
+          <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+        </svg>
+        {adbBusy ? 'Restarting...' : 'Restart ADB Server'}
+      </button>
+
+      <div class="tcpip-row">
+        <div class="input-wrap small">
+          <input
+            class="input small"
+            type="number"
+            bind:value={tcpipPort}
+            min="1024"
+            max="65535"
+            disabled={tcpipBusy}
+          />
+        </div>
+        <button
+          class="glass-btn"
+          onclick={handleEnableTcpip}
+          disabled={tcpipBusy}
+        >
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+            <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+            <circle cx="12" cy="20" r="1" fill="currentColor" />
+          </svg>
+          {tcpipBusy ? 'Enabling...' : 'Enable TCP/IP'}
+        </button>
+      </div>
+      <p class="hint">Connect device via USB first, then enable TCP/IP mode.</p>
     </section>
 
     <!-- Scrcpy Section -->
@@ -406,6 +480,36 @@
   .glass-btn.full {
     width: 100%;
     margin-top: 8px;
+  }
+
+  .tcpip-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    align-items: center;
+  }
+
+  .input-wrap.small {
+    width: 72px;
+    flex: none;
+  }
+
+  .input.small {
+    width: 100%;
+    padding: 6px 8px;
+    padding-right: 8px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .tcpip-row .glass-btn {
+    flex: 1;
+  }
+
+  .hint {
+    margin: 6px 0 0;
+    font-size: 10px;
+    color: #666;
   }
 
   .btn-icon {

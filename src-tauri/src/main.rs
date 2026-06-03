@@ -58,15 +58,17 @@ fn tray_setup(app: &tauri::App) {
                                 .inner_size()
                                 .unwrap_or_else(|_| tauri::PhysicalSize::new(320, 480));
                             let win_w = win_size.width as f64 / scale;
-                            let tray_center_x = tray_x + tray_width / 2.0;
+                            #[cfg(target_os = "macos")]
+                            let x = tray_x;
+                            #[cfg(target_os = "windows")]
+                            let x = tray_x;
                             #[cfg(target_os = "windows")]
                             let win_h = win_size.height as f64 / scale;
                             #[cfg(target_os = "macos")]
                             let y = tray_y + tray_height;
                             #[cfg(target_os = "windows")]
                             let y = tray_y - win_h;
-                            let _ = window
-                                .set_position(LogicalPosition::new(tray_center_x - win_w / 2.0, y));
+                            let _ = window.set_position(LogicalPosition::new(x, y));
                         }
                         let _ = window.show();
                         let _ = window.set_focus();

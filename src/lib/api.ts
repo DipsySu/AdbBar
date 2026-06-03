@@ -14,8 +14,8 @@ export async function disconnectDevice(address: string): Promise<string> {
   return invoke<string>('disconnect_device', { address });
 }
 
-export async function refreshAll(): Promise<AdbDevice[]> {
-  return invoke<AdbDevice[]>('refresh_all');
+export async function refreshAll(reconnect = false): Promise<AdbDevice[]> {
+  return invoke<AdbDevice[]>('refresh_all', { reconnect });
 }
 
 export async function scanNetwork(port: number = 5555): Promise<ScanResult[]> {
@@ -68,6 +68,14 @@ export async function installScrcpy(): Promise<void> {
 
 export async function quitApp(): Promise<void> {
   return invoke<void>('quit_app');
+}
+
+export async function restartAdb(): Promise<string> {
+  return invoke<string>('restart_adb');
+}
+
+export async function enableTcpip(address?: string, port?: number): Promise<string> {
+  return invoke<string>('enable_tcpip', { address, port });
 }
 
 export function listen<T>(event: string, handler: (payload: T) => void) {

@@ -17,6 +17,8 @@ A cross-platform system tray app for managing ADB devices. Built with Tauri (Rus
 - Quick actions: Shell, Scrcpy mirror, Screenshot, Install APK
 - Configurable ADB path with auto-detection
 - Scrcpy auto-detection and one-click installation
+- ADB quick tools: restart ADB server, enable TCP/IP mode
+- Smart refresh: reconnects dropped connections on manual refresh
 - Device list persistence across restarts
 
 ## Platforms
@@ -64,6 +66,8 @@ npx tauri build
 - 快捷操作：Shell 终端、Scrcpy 投屏、截屏、安装 APK
 - 可配置 ADB 路径，支持自动检测
 - Scrcpy 自动检测与一键安装（macOS: Homebrew，Windows: 自动下载）
+- ADB 快捷工具：重启 ADB 服务、一键开启 TCP/IP 模式
+- 智能刷新：手动刷新时自动重连已断开的设备
 - 设备列表持久化，重启后保留
 
 ## 支持平台

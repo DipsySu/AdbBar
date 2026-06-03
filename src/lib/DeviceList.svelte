@@ -26,7 +26,7 @@
   async function handleRefresh() {
     store.isRefreshing = true;
     try {
-      store.devices = await refreshAll();
+      store.devices = await refreshAll(true);
       store.showStatus('Refreshed');
     } catch (e) {
       store.showStatus(getErrorMessage(e, 'Refresh failed'));
