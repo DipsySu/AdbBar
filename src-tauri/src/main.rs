@@ -50,14 +50,14 @@ fn tray_setup(app: &tauri::App) {
                                 Size::Physical(s) => s.height as f64 / scale,
                                 Size::Logical(s) => s.height,
                             };
-                            let tray_width = match rect.size {
+                            let _tray_width = match rect.size {
                                 Size::Physical(s) => s.width as f64 / scale,
                                 Size::Logical(s) => s.width,
                             };
                             let win_size = window
                                 .inner_size()
                                 .unwrap_or_else(|_| tauri::PhysicalSize::new(320, 480));
-                            let win_w = win_size.width as f64 / scale;
+                            let _win_w = win_size.width as f64 / scale;
                             #[cfg(target_os = "macos")]
                             let x = tray_x;
                             #[cfg(target_os = "windows")]
